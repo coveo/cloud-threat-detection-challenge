@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "cloud-threat-detection-challenge-aws"
+version = "0.1.0"
+description = "AWS-focused cloud threat detection engineering challenge"
+authors = ["Coveo Security Team <security@coveo.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [{ include = "src" }]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+pandas = "^2.2.2"
+pydantic = "^2.9.2"
+python-dateutil = "^2.9.0.post0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.0.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
