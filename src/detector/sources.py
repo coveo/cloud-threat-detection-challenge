@@ -1,43 +1,48 @@
-import json, os, csv
+import os
+from typing import Iterator
 
-def load_cloudtrail(in_dir: str):
-    path = os.path.join(in_dir, 'cloudtrail.jsonl')
-    events = []
-    if os.path.exists(path):
-        with open(path) as f:
-            for line in f:
-                line=line.strip()
-                if not line: continue
-                try: events.append(json.loads(line))
-                except json.JSONDecodeError: pass
-    return events
 
-def load_vpc_flows(in_dir: str):
-    path = os.path.join(in_dir, 'vpc_flow.csv')
-    rows=[]
-    if os.path.exists(path):
-        with open(path) as f:
-            reader = csv.reader(f)
-            for r in reader:
-                if len(r) < 14: continue
-                rows.append({
-                    'version': r[0], 'account': r[1], 'eni': r[2],
-                    'srcaddr': r[3], 'dstaddr': r[4],
-                    'srcport': int(r[5]), 'dstport': int(r[6]),
-                    'protocol': int(r[7]), 'packets': int(r[8]), 'bytes': int(r[9]),
-                    'start': int(r[10]), 'end': int(r[11]),
-                    'action': r[12], 'status': r[13]
-                })
-    return rows
+def read_log_files(input_path: str) -> Iterator[str]:
+    """
+    Iterator-based function that reads log files line by line.
 
-def load_guardduty_findings(in_dir: str):
-    path = os.path.join(in_dir, 'guardduty_findings.jsonl')
-    arr=[]
-    if os.path.exists(path):
-        with open(path) as f:
-            for line in f:
-                line=line.strip()
-                if not line: continue
-                try: arr.append(json.loads(line))
-                except json.JSONDecodeError: pass
-    return arr
+    Handles both single file and directory input paths.
+    Yields raw log lines as strings without any parsing or processing.
+
+    Args:
+        input_path: Path to a single log file or directory containing log files
+
+    Yields:
+        str: Raw log lines from the input files
+    """
+    if os.path.isfile(input_path):
+        # Handle single file input
+        yield from _read_single_file(input_path)
+    elif os.path.isdir(input_path):
+        # Handle directory input - read all files in directory
+        for filename in os.listdir(input_path):
+            file_path = os.path.join(input_path, filename)
+            if os.path.isfile(file_path):
+                yield from _read_single_file(file_path)
+    else:
+        raise FileNotFoundError(f"Input path does not exist: {input_path}")
+
+
+def _read_single_file(file_path: str) -> Iterator[str]:
+    """
+    Read a single file line by line.
+
+    Args:
+        file_path: Path to the file to read
+
+    Yields:
+        str: Raw lines from the file
+    """
+    try:
+        with open(file_path, "r", encoding="utf-8") as file:
+            for line in file:
+                # Yield raw line without any processing or parsing
+                yield line.rstrip("\n\r")
+    except (IOError, OSError) as e:
+        print(f"Warning: Could not read file {file_path}: {e}")
+        return

@@ -1,80 +1,38 @@
-from typing import Dict, Iterable
+# No imports needed for basic placeholder implementation
 
-SENSITIVE_BUCKETS = {'coveo-secrets', 'prod-secrets', 'backups'}
-UNUSUAL_IPS = {'95.142.122.10','178.62.100.33','101.99.12.4'}
 
-SEVERITY_MAP = {
-    'low':'low','medium':'medium','high':'high','critical':'critical'
-}
+class ThreatDetector:
+    """
+    PLACEHOLDER CLASS FOR CANDIDATE IMPLEMENTATION
 
-class RuleEngine:
-    # CloudTrail detections
-    def apply_cloudtrail(self, event: Dict) -> Iterable[Dict]:
-        source = event.get('eventSource')
-        name = event.get('eventName')
-        if source == 'iam.amazonaws.com' and name == 'DeleteUser':
-            if event.get('sourceIPAddress') in UNUSUAL_IPS:
-                yield {
-                    'event_id': event.get('event_id'),
-                    'threat_type': 'IAMPrivilegeTampering',
-                    'severity': 'high',
-                    'reason': 'DeleteUser from unusual IP'
-                }
-        if source == 's3.amazonaws.com' and name == 'GetObject':
-            bucket = (event.get('requestParameters') or {}).get('bucketName')
-            bytes_out = (event.get('additionalEventData') or {}).get('bytesTransferredOut', 0)
-            if bucket in SENSITIVE_BUCKETS and bytes_out and bytes_out > 1_000_000_000:
-                yield {
-                    'event_id': event.get('event_id'),
-                    'threat_type': 'S3DataExfiltration',
-                    'severity': 'critical',
-                    'reason': f'Large exfiltration from sensitive bucket {bucket}'
-                }
-        if source == 'signin.amazonaws.com' and name == 'ConsoleLogin':
-            if (event.get('additionalEventData') or {}).get('MFAUsed') == 'No' and event.get('sourceIPAddress') in UNUSUAL_IPS:
-                yield {
-                    'event_id': event.get('event_id'),
-                    'threat_type': 'ConsoleLoginNoMFAAnomalousIP',
-                    'severity': 'medium',
-                    'reason': 'ConsoleLogin without MFA from unusual IP'
-                }
+    This class contains placeholder methods that candidates must implement
+    to complete the threat detection challenge.
 
-    # GuardDuty finding mapping
-    def apply_guardduty(self, finding: Dict) -> Iterable[Dict]:
-        ftype = finding.get('type','')
-        sev = finding.get('severity', 0.0)  # 0..8
-        # Map some canonical types
-        if 'UnauthorizedAccess:AnonymousIPCaller' in ftype:
-            yield {
-                'finding_id': finding.get('id'),
-                'threat_type': 'GD_UnauthorizedAccess_AnonymousIP',
-                'severity': 'high',
-                'reason': 'Anonymous IP invoked sensitive API'
-            }
-        elif 'CryptoCurrency:EC2/BitcoinTool' in ftype:
-            yield {
-                'finding_id': finding.get('id'),
-                'threat_type': 'GD_CryptoCurrency_SuspectedMining',
-                'severity': 'medium',
-                'reason': 'EC2 making mining pool DNS queries'
-            }
-        elif 'DefenseEvasion:IAMUser/PasswordPolicyChange' in ftype:
-            yield {
-                'finding_id': finding.get('id'),
-                'threat_type': 'GD_DefenseEvasion_PasswordPolicyChange',
-                'severity': 'medium',
-                'reason': 'Password policy weakened'
-            }
-        elif 'Persistence:IAMUser/AccessKeyCreated' in ftype:
-            yield {
-                'finding_id': finding.get('id'),
-                'threat_type': 'GD_Persistence_AccessKeyForDormantUser',
-                'severity': 'high',
-                'reason': 'Access key created for dormant user'
-            }
-        else:
-            return []
+    DO NOT modify the method signatures - the pipeline expects these exact interfaces.
+    """
+    
+    def __init__(self, output_sink):
+        """
+        Initialize threat detector with output sink for writing results.
+        
+        Args:
+            output_sink: OutputSink instance for writing enriched logs and alerts
+        """
+        self.output_sink = output_sink
 
-    # Bonus: VPC scanning placeholder (left for candidates)
-    def apply_vpc_flow(self, rec: Dict) -> Iterable[Dict]:
-        return []
+    def process_log_line(self, raw_line: str) -> None:
+        """
+        PLACEHOLDER METHOD - IMPLEMENT YOUR DETECTION LOGIC HERE
+
+        This method receives a raw log line as a string and processes it for threats.
+        When threats are detected, write enriched logs/alerts to the output sink.
+
+        Args:
+            raw_line (str): Raw log line from input files
+
+        Side Effects:
+            Writes alerts/enriched logs to self.output_sink when threats detected.
+            Use self.output_sink.write_alert(alert_dict) to write results.
+        """
+        # TODO: IMPLEMENT YOUR DETECTION LOGIC HERE
+        pass  # Replace this with your implementation

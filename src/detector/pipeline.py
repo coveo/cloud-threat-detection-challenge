@@ -1,31 +1,66 @@
-from .sources import load_cloudtrail, load_vpc_flows, load_guardduty_findings
-from .rules import RuleEngine
-from datetime import datetime
+from .sources import read_log_files
+from .rules import ThreatDetector
+from .sink import OutputSink
+
 
 class DetectionPipeline:
-    def __init__(self, in_dir: str):
-        self.in_dir = in_dir
-        self.rules = RuleEngine()
+    """
+    Detection pipeline that processes log files line by line through candidate detection functions.
 
-    def run(self):
-        alerts = []
-        ct_events = load_cloudtrail(self.in_dir)
-        vpc_flows = load_vpc_flows(self.in_dir)
-        gd_findings = load_guardduty_findings(self.in_dir)
+    This pipeline reads log files using the log file iterator, passes each raw log line
+    to candidate-implemented detection functions, and coordinates output through a sink.
+    """
 
-        for ev in ct_events:
-            for alert in self.rules.apply_cloudtrail(ev):
-                alert['ts'] = ev.get('eventTime') or datetime.utcnow().isoformat() + 'Z'
-                alerts.append(alert)
+    def __init__(self, input_path: str, output_path: str):
+        """
+        Initialize the detection pipeline.
 
-        for fin in gd_findings:
-            for alert in self.rules.apply_guardduty(fin):
-                alert['ts'] = fin.get('service',{}).get('eventLastSeen') or datetime.utcnow().isoformat() + 'Z'
-                alerts.append(alert)
+        Args:
+            input_path: Path to input file or directory containing log files
+            output_path: Path to output file for writing results
+        """
+        self.input_path = input_path
+        self.output_path = output_path
 
-        for rec in vpc_flows:
-            for alert in self.rules.apply_vpc_flow(rec):
-                alert['ts'] = datetime.utcnow().isoformat() + 'Z'
-                alerts.append(alert)
+    def process_logs(self) -> None:
+        """
+        Process all log files through candidate detection functions.
 
-        return alerts
+        Reads log files line by line using the log file iterator and passes each
+        raw line to the candidate detection function. The detection function
+        performs side effects by writing alerts/enriched logs to the output sink.
+        """
+        with OutputSink(self.output_path) as output_sink:
+            # Initialize detector with output sink
+            detector = ThreatDetector(output_sink)
+
+            try:
+                # Use the log file iterator to read files line by line
+                for raw_line in read_log_files(self.input_path):
+                    # Skip empty lines
+                    if not raw_line.strip():
+                        continue
+
+                    # Pass raw line to candidate detection function
+                    self.process_line(detector, raw_line)
+
+            except Exception as e:
+                print(f"Error processing logs: {e}")
+                # Continue processing - output sink will be properly closed
+
+    def process_line(self, detector: ThreatDetector, raw_line: str) -> None:
+        """
+        Process a single raw log line through candidate detection functions.
+
+        Args:
+            detector: ThreatDetector instance with output sink
+            raw_line: Raw log line string from input files
+        """
+        try:
+            # Pass raw line to candidate-implemented detection function
+            # Detection function performs side effects via output sink
+            detector.process_log_line(raw_line)
+
+        except Exception as e:
+            print(f"Error processing line: {e}")
+            # Continue processing other lines

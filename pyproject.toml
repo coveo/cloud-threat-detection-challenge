@@ -1,17 +1,24 @@
-[tool.poetry]
-name = "cloud-threat-detection-challenge-aws"
+[project]
+name = "threat-detection-challenge"
 version = "0.1.0"
-description = "AWS-focused cloud threat detection engineering challenge"
-authors = ["Coveo Security Team <security@coveo.com>"]
-license = "MIT"
+description = "Threat detection engineering challenge"
+authors = [
+    {name = "Security Team", email = "security@example.com"}
+]
+license = {text = "MIT"}
 readme = "README.md"
-packages = [{ include = "src" }]
+requires-python = ">=3.12"
+dependencies = [
+    "click>=8.1.7",
+    "python-dateutil>=2.9.0",
+    "pydantic>=2.9.2"
+]
 
-[tool.poetry.dependencies]
-python = "^3.11"
-pandas = "^2.2.2"
-pydantic = "^2.9.2"
-python-dateutil = "^2.9.0.post0"
+[project.scripts]
+threat-detector = "src.cli:main"
+
+[tool.poetry]
+packages = [{ include = "src" }]
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.0.0"
