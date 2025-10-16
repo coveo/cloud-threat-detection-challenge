@@ -1,3 +1,5 @@
+from typing import Union
+from pathlib import Path
 from .sources import read_log_files
 from .rules import ThreatDetector
 from .sink import OutputSink
@@ -10,8 +12,11 @@ class DetectionPipeline:
     This pipeline reads log files using the log file iterator, passes each raw log line
     to candidate-implemented detection functions, and coordinates output through a sink.
     """
+    
+    input_path: str
+    output_path: str
 
-    def __init__(self, input_path: str, output_path: str):
+    def __init__(self, input_path: Union[str, Path], output_path: Union[str, Path]) -> None:
         """
         Initialize the detection pipeline.
 
@@ -19,8 +24,8 @@ class DetectionPipeline:
             input_path: Path to input file or directory containing log files
             output_path: Path to output file for writing results
         """
-        self.input_path = input_path
-        self.output_path = output_path
+        self.input_path = str(input_path)
+        self.output_path = str(output_path)
 
     def process_logs(self) -> None:
         """

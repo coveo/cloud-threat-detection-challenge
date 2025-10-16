@@ -43,7 +43,7 @@ graph TD
 
 **Interface**:
 ```python
-def main():
+def main() -> None:
     # Parse command line arguments
     # Initialize detection pipeline
     # Execute processing
@@ -81,7 +81,7 @@ def read_log_files(input_path: str) -> Iterator[str]:
 **Interface**:
 ```python
 class DetectionPipeline:
-    def __init__(self, input_path: str, output_path: str):
+    def __init__(self, input_path: str, output_path: str) -> None:
         # Initialize pipeline with input source and output sink
         
     def process_logs(self) -> None:
@@ -100,11 +100,13 @@ class DetectionPipeline:
 
 **Interface**:
 ```python
+from typing import Dict, Any
+
 class OutputSink:
-    def __init__(self, output_path: str):
+    def __init__(self, output_path: str) -> None:
         # Initialize output file for writing results
         
-    def write_alert(self, alert: dict) -> None:
+    def write_alert(self, alert: Dict[str, Any]) -> None:
         # Write alert/enriched log entry to output file
         # Handle JSON formatting and file operations
         
@@ -118,8 +120,10 @@ class OutputSink:
 
 **Interface**:
 ```python
+from typing import Dict, Any, Optional
+
 class ThreatDetector:
-    def __init__(self, output_sink):
+    def __init__(self, output_sink: OutputSink) -> None:
         # Initialize with reference to output sink for writing results
         
     def process_log_line(self, raw_line: str) -> None:
@@ -132,15 +136,20 @@ class ThreatDetector:
 
 **Enriched Log/Alert Format**:
 ```python
+from typing import Dict, Any, Optional
+
+AlertDict = Dict[str, Any]  # Type alias for alert dictionaries
+
+# Example alert structure:
 {
-    "timestamp": "2024-01-01T12:00:00Z",
-    "severity": "high|medium|low|critical",
-    "threat_type": "descriptive_threat_name",
-    "source_log": "original_log_entry_reference",
-    "evidence": "description_of_suspicious_activity",
-    "confidence": 0.85,  # Optional confidence score
-    "metadata": {},  # Additional context
-    "enriched_fields": {}  # Fields added by detection logic
+    "timestamp": "2024-01-01T12:00:00Z",  # str
+    "severity": "high|medium|low|critical",  # str
+    "threat_type": "descriptive_threat_name",  # str
+    "source_log": "original_log_entry_reference",  # str
+    "evidence": "description_of_suspicious_activity",  # str
+    "confidence": 0.85,  # Optional[float] - confidence score
+    "metadata": {},  # Dict[str, Any] - additional context
+    "enriched_fields": {}  # Dict[str, Any] - fields added by detection logic
 }
 ```
 
@@ -164,17 +173,23 @@ class ThreatDetector:
 
 **Standard Output Format**:
 ```python
+from typing import Dict, Any, Optional
+
+# Type definitions for output format
+OutputEntry = Dict[str, Any]
+
+# Standard output structure with type annotations:
 {
-    "id": str,                    # Unique entry identifier
-    "timestamp": str,             # Original or detection timestamp
-    "severity": str,              # Severity level (if threat detected)
-    "threat_type": str,           # Classification of threat (if applicable)
-    "description": str,           # Human-readable description
-    "source_log": str,            # Reference to original log entry
-    "confidence": float,          # Detection confidence (0-1)
-    "metadata": dict,             # Additional context
-    "enriched_fields": dict,      # Fields added by detection processing
-    "original_log": str           # Original raw log line for reference
+    "id": str,                           # Unique entry identifier
+    "timestamp": str,                    # Original or detection timestamp
+    "severity": Optional[str],           # Severity level (if threat detected)
+    "threat_type": Optional[str],        # Classification of threat (if applicable)
+    "description": str,                  # Human-readable description
+    "source_log": str,                   # Reference to original log entry
+    "confidence": Optional[float],       # Detection confidence (0-1)
+    "metadata": Dict[str, Any],          # Additional context
+    "enriched_fields": Dict[str, Any],   # Fields added by detection processing
+    "original_log": str                  # Original raw log line for reference
 }
 ```
 
@@ -232,6 +247,70 @@ class ThreatDetector:
 - Performance considerations and optimization
 - Error handling and edge case management
 
+## Type Hints and Code Quality Standards
+
+### Type Annotation Requirements
+
+**Comprehensive Type Coverage**:
+- All function parameters and return values must include type hints
+- Class attributes and instance variables must be type annotated
+- Complex data structures must use appropriate typing imports
+- Optional and Union types must be explicitly declared
+
+**Typing Import Strategy**:
+```python
+from typing import Dict, List, Optional, Union, Any, Iterator, Tuple
+from pathlib import Path
+```
+
+**Function Signature Examples**:
+```python
+def process_log_file(file_path: Path, output_sink: OutputSink) -> None:
+    """Process a single log file and write results to output sink."""
+    pass
+
+def parse_json_log(raw_line: str) -> Optional[Dict[str, Any]]:
+    """Parse JSON log line, return None if parsing fails."""
+    pass
+
+def extract_timestamp(log_entry: Dict[str, Any]) -> Optional[str]:
+    """Extract timestamp from parsed log entry."""
+    pass
+```
+
+**Class Type Annotations**:
+```python
+class ThreatDetector:
+    output_sink: OutputSink
+    detection_rules: List[str]
+    confidence_threshold: float
+    
+    def __init__(self, output_sink: OutputSink, threshold: float = 0.7) -> None:
+        self.output_sink = output_sink
+        self.detection_rules = []
+        self.confidence_threshold = threshold
+```
+
+**Type Checking Integration**:
+- Code must pass mypy type checking without errors
+- Type ignore comments should be used sparingly and documented
+- Generic types should be used appropriately for collections
+- Type aliases should be defined for complex recurring types
+
+### Candidate Implementation Guidance
+
+**Type Hint Templates**:
+- Placeholder functions include complete type signatures
+- Documentation explains expected input/output types
+- Examples demonstrate proper typing patterns
+- Common typing patterns are documented in README
+
+**Quality Standards**:
+- All candidate-facing code serves as a typing example
+- Consistent style across all modules
+- Clear separation between framework and candidate code
+- Type hints aid in understanding expected data flow
+
 ## Documentation Structure
 
 ### README Sections
@@ -251,7 +330,7 @@ class ThreatDetector:
 - All public functions documented with purpose and parameters
 - Example usage provided for complex functions
 - Error conditions and return values specified
-- Type hints used throughout codebase
+- Type hints used throughout codebase for all functions, methods, and variables
 
 **Inline Comments**:
 - Placeholder functions clearly marked for candidate implementation

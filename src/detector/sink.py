@@ -1,5 +1,6 @@
 import json
-from typing import Dict, Any
+from pathlib import Path
+from typing import Dict, Any, Optional, Union, TextIO
 
 
 class OutputSink:
@@ -10,18 +11,22 @@ class OutputSink:
     log entries to the specified output file in JSON format.
     """
     
-    def __init__(self, output_path: str):
+    output_path: str
+    output_file: Optional[TextIO]
+    _first_entry: bool
+    
+    def __init__(self, output_path: Union[str, Path]) -> None:
         """
         Initialize output sink with target file path.
         
         Args:
             output_path: Path to output file for writing results
         """
-        self.output_path = output_path
+        self.output_path = str(output_path)
         self.output_file = None
         self._initialize_output_file()
     
-    def _initialize_output_file(self):
+    def _initialize_output_file(self) -> None:
         """Initialize the output file for writing."""
         try:
             self.output_file = open(self.output_path, 'w', encoding='utf-8')
@@ -71,10 +76,10 @@ class OutputSink:
             except Exception as e:
                 print(f"Error closing output file: {e}")
     
-    def __enter__(self):
+    def __enter__(self) -> 'OutputSink':
         """Context manager entry."""
         return self
     
-    def __exit__(self, exc_type, exc_val, exc_tb):
+    def __exit__(self, exc_type: Optional[type], exc_val: Optional[Exception], exc_tb: Optional[Any]) -> None:
         """Context manager exit."""
         self.close()

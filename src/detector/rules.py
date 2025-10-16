@@ -1,4 +1,9 @@
-# No imports needed for basic placeholder implementation
+from typing import Dict, Any, Optional
+from .sink import OutputSink
+
+# Type aliases for common data structures
+AlertDict = Dict[str, Any]
+LogEntry = Dict[str, Any]
 
 
 class ThreatDetector:
@@ -11,7 +16,9 @@ class ThreatDetector:
     DO NOT modify the method signatures - the pipeline expects these exact interfaces.
     """
     
-    def __init__(self, output_sink):
+    output_sink: OutputSink
+    
+    def __init__(self, output_sink: OutputSink) -> None:
         """
         Initialize threat detector with output sink for writing results.
         

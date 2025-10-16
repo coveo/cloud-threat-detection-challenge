@@ -65,3 +65,65 @@
   - Remove any parsing logic that candidates should implement themselves
   - Ensure codebase provides minimal framework without revealing detection approaches
   - _Requirements: 2.4, 2.5_
+
+- [x] 10. Add comprehensive type hints to all existing code
+
+- [x] 10.1 Add type hints to CLI module (src/cli.py)
+
+  - Add type annotations for all function parameters and return values
+  - Import necessary typing modules (Optional, Dict, Any, etc.)
+  - Ensure main() function and argument parsing have proper type hints
+  - _Requirements: 7.1, 7.2, 7.3, 7.5_
+
+- [x] 10.2 Add type hints to log sources module (src/detector/sources.py)
+
+  - Add type annotations for file reading functions and iterators
+  - Use Path type for file path parameters
+  - Ensure Iterator type hints for log line generators
+  - _Requirements: 7.1, 7.2, 7.3, 7.5_
+
+- [x] 10.3 Add type hints to detection pipeline (src/detector/pipeline.py)
+
+  - Add type annotations for DetectionPipeline class and all methods
+  - Include type hints for class attributes and instance variables
+  - Ensure proper typing for pipeline orchestration methods
+  - _Requirements: 7.1, 7.2, 7.3, 7.5_
+
+- [x] 10.4 Add type hints to output sink module (src/detector/sink.py)
+
+  - Add type annotations for OutputSink class and all methods
+  - Use Dict[str, Any] for alert data structures
+  - Include proper typing for file operations and JSON handling
+  - _Requirements: 7.1, 7.2, 7.3, 7.5_
+
+- [x] 10.5 Add type hints to detection rules module (src/detector/rules.py)
+
+  - Add comprehensive type annotations to ThreatDetector class
+  - Include type hints for placeholder methods that candidates will implement
+  - Define type aliases for common data structures (AlertDict, LogEntry, etc.)
+  - Ensure candidate-facing functions serve as typing examples
+  - _Requirements: 7.1, 7.2, 7.3, 7.4, 7.5, 7.7_
+
+- [ ]\* 10.6 Add mypy configuration and type checking validation
+
+  - Create mypy.ini configuration file with appropriate settings
+  - Add type checking to development workflow
+  - Ensure all modules pass mypy validation without errors
+  - Document type checking process in README
+  - _Requirements: 7.6, 7.8_
+
+- [ ] 11. Update documentation to include type hints guidance
+
+- [ ] 11.1 Add type hints section to README
+
+  - Document type annotation requirements for candidates
+  - Provide examples of proper typing patterns
+  - Explain typing imports and common patterns used in the codebase
+  - Include guidance on type checking tools and validation
+  - _Requirements: 7.4, 7.7_
+
+- [ ] 11.2 Update code examples in README with type hints
+  - Ensure all code snippets in documentation include proper type annotations
+  - Update function signatures and class examples
+  - Demonstrate typing best practices in all examples
+  - _Requirements: 7.4, 7.5, 7.7_

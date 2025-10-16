@@ -1,8 +1,9 @@
 import os
-from typing import Iterator
+from pathlib import Path
+from typing import Iterator, Union
 
 
-def read_log_files(input_path: str) -> Iterator[str]:
+def read_log_files(input_path: Union[str, Path]) -> Iterator[str]:
     """
     Iterator-based function that reads log files line by line.
 
@@ -15,17 +16,18 @@ def read_log_files(input_path: str) -> Iterator[str]:
     Yields:
         str: Raw log lines from the input files
     """
-    if os.path.isfile(input_path):
+    input_str = str(input_path)
+    if os.path.isfile(input_str):
         # Handle single file input
-        yield from _read_single_file(input_path)
-    elif os.path.isdir(input_path):
+        yield from _read_single_file(input_str)
+    elif os.path.isdir(input_str):
         # Handle directory input - read all files in directory
-        for filename in os.listdir(input_path):
-            file_path = os.path.join(input_path, filename)
+        for filename in os.listdir(input_str):
+            file_path = os.path.join(input_str, filename)
             if os.path.isfile(file_path):
                 yield from _read_single_file(file_path)
     else:
-        raise FileNotFoundError(f"Input path does not exist: {input_path}")
+        raise FileNotFoundError(f"Input path does not exist: {input_str}")
 
 
 def _read_single_file(file_path: str) -> Iterator[str]:

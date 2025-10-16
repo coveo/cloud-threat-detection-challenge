@@ -1,10 +1,11 @@
 import argparse
 import sys
 from pathlib import Path
+from typing import Optional
 from src.detector.pipeline import DetectionPipeline
 
 
-def main():
+def main() -> int:
     """
     Main entry point for the threat detection challenge CLI.
 
