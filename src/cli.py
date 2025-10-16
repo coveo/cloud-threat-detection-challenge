@@ -16,9 +16,9 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  python -m src.cli --in /path/to/logs --out alerts.json
-  python -m src.cli --in single_log.txt --out results.json
-  python -m src.cli --in /path/to/directory
+  poetry run python -m src.cli --in /path/to/logs --out alerts.json
+  poetry run python -m src.cli --in single_log.txt --out results.json
+  poetry run python -m src.cli --in /path/to/directory
         """,
     )
 
