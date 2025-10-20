@@ -16,7 +16,7 @@
 - [x] 3. Create placeholder detection function structure
 
   - Implement minimal placeholder class in src/detector/rules.py with process_log_line method
-  - Function should accept raw log line string and return list of alert dictionaries
+  - Function should accept raw log line string and process it via side effects (e.g., storing alerts internally or emitting them via a callback), without returning a value
   - Include clear comments indicating this is for candidate implementation
   - _Requirements: 2.2, 2.3, 2.4, 2.5_
 
