@@ -22,7 +22,7 @@ def read_log_files(input_path: Union[str, Path]) -> Iterator[str]:
         yield from _read_single_file(input_str)
     elif os.path.isdir(input_str):
         # Handle directory input - read all files in directory
-        for filename in os.listdir(input_str):
+        for filename in sorted(os.listdir(input_str)):
             file_path = os.path.join(input_str, filename)
             if os.path.isfile(file_path):
                 yield from _read_single_file(file_path)
