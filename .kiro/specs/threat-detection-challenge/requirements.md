@@ -13,10 +13,10 @@ This feature involves creating a technical challenge repository for threat detec
 #### Acceptance Criteria
 
 1. WHEN running the script THEN the system SHALL accept input parameters for log files or directories containing multiple log files
-2. WHEN processing log files THEN the system SHALL attempt to parse multiple known formats including JSON and structured logs
-3. WHEN parsing succeeds THEN the system SHALL load each log entry as a dictionary for further processing
-4. WHEN parsing fails THEN the system SHALL gracefully handle malformed entries and continue processing valid entries
-5. WHEN logs are loaded THEN the system SHALL pass each dictionary to candidate-implemented detection functions
+2. WHEN processing log files THEN the system SHALL yield raw log lines (strings) to the candidate for further processing
+3. WHEN parsing is required THEN the candidate SHALL be responsible for parsing log lines into dictionaries, supporting multiple known formats including JSON and structured logs
+4. WHEN parsing fails THEN the candidate SHALL gracefully handle malformed entries and continue processing valid entries
+5. WHEN logs are loaded THEN the system SHALL pass each raw log line (string) to candidate-implemented detection functions
 6. WHEN processing is complete THEN the system SHALL output results in a specified format for evaluation
 
 ### Requirement 2: Detection Function Placeholders
