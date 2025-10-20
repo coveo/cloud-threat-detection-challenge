@@ -195,11 +195,11 @@ cat test_results.json | python -m json.tool
 
 ## Deliverables and Submission
 
-Submit the following components to complete the challenge:
+Complete the following components to complete the challenge. We will review the details during the interview. You may present those documents as well as your forensics process in OpenSearch, or any other investigation tool if you used one.
 
 ### 1. Kill Chain Analysis Document
-- **Format**: PDF or Markdown document (3-5 pages with visualizations)
-- **Content**: Comprehensive forensic investigation including:
+- **Format**: PDF, Markdown, Word, PPT, TXT file, whatever works to convey the investigation and findings. We will review during the interview.
+- **Content**: Forensic investigation including:
   - Executive summary of the incident
   - Timeline of attack progression with supporting evidence
   - Technical details of each attack phase
@@ -218,9 +218,8 @@ Submit the following components to complete the challenge:
 ```
 threat-detection-challenge/
 ├── src/detector/rules.py          # Your detection implementation
-├── kill_chain_analysis.pdf        # Your forensic analysis
+├── kill_chain_analysis.<whatever>        # Your forensic analysis
 ├── sample_alerts.json            # Example output from your detector
-└── README_IMPLEMENTATION.md      # Your implementation notes
 ```
 
 Good luck with the challenge! Focus on demonstrating your analytical skills in the forensic investigation and your technical abilities in the detection implementation.
