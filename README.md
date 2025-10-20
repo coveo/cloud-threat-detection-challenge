@@ -112,7 +112,7 @@ poetry run python -m src.cli --in /var/log/security/
 
 Analyze the provided security logs to understand what happened during the incident. You are expected to write a document detailing the security event with a timeline of the attack and important log entries as supporting evidence.
 
-**Recommended Analysis Tool**: Consider using OpenSearch locally with Docker for log analysis - [OpenSearch Docker installation guide](https://opensearch.org/docs/latest/install-and-configure/install-opensearch/docker/)
+> 💡 **Recommended Analysis Tool**: Consider using a hosted OpenSearch, or locally deployed with Docker, for log analysis - [OpenSearch Docker installation guide](https://opensearch.org/docs/latest/install-and-configure/install-opensearch/docker/)
 
 **Deliverable**: A kill chain analysis document that reconstructs the security event timeline with supporting evidence from the logs.
 
