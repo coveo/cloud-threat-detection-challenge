@@ -4,13 +4,9 @@
 
 Welcome to the Threat Detection Challenge! As a threat detection engineer, you are tasked with investigating a security incident and implementing detection logic to identify malicious activity in security logs.
 
-**Your deliverables include:**
-
-1. **Kill Chain Analysis**: A comprehensive forensic investigation document detailing the attack progression with supporting evidence
-2. **Detection Implementation**: Python-based detection functions that process security logs and identify threats
+**Your deliverable**: Detection Implementation, a Python-based detection function that processes security logs and identifies threats
 
 This challenge tests your ability to:
-- Conduct digital forensics and incident response
 - Parse and analyze security log data
 - Implement threat detection rules and logic
 - Handle various log formats and edge cases
@@ -106,19 +102,9 @@ poetry run python -m src.cli --in /var/log/security/
 
 ## Challenge Objectives
 
-### Part 1: Kill Chain Analysis (Forensic Investigation)
+### Detection Implementation
 
-**This is your first deliverable and should be completed before implementing detection rules.**
-
-Analyze the provided security logs to understand what happened during the incident. You are expected to write a document detailing the security event with a timeline of the attack and important log entries as supporting evidence.
-
-> 💡 **Recommended Analysis Tool**: Consider using a hosted OpenSearch, or locally deployed with Docker, for log analysis - [OpenSearch Docker installation guide](https://opensearch.org/docs/latest/install-and-configure/install-opensearch/docker/)
-
-**Deliverable**: A kill chain analysis document that reconstructs the security event timeline with supporting evidence from the logs.
-
-### Part 2: Detection Implementation
-
-After understanding the kill chain, consider what needs to be implemented to catch similar events in action. Implement threat detection logic in the provided Python framework:
+From the kill chain, consider what needs to be implemented to catch similar events in action. Implement threat detection logic in the provided Python framework:
 
 1. **Parse Log Data**: Handle various log formats (JSON, structured text, etc.)
 2. **Extract Relevant Fields**: Identify key data points for threat detection
@@ -127,9 +113,9 @@ After understanding the kill chain, consider what needs to be implemented to cat
 5. **Handle Edge Cases**: Manage malformed logs and parsing errors
 
 
-## Implementation Guide
+### Implementation Guide
 
-### Detection Function Structure
+#### Detection Function Structure
 
 Your main implementation goes in `src/detector/rules.py` in the `ThreatDetector` class:
 
@@ -160,7 +146,7 @@ class ThreatDetector:
         self.output_sink.write_alert(alert)
 ```
 
-### Alert Output Format
+#### Alert Output Format
 
 Your detection functions should generate alerts in this standardized format:
 
@@ -178,7 +164,7 @@ Your detection functions should generate alerts in this standardized format:
 }
 ```
 
-### Testing Your Implementation
+#### Testing Your Implementation
 
 1. **Run with Sample Data**: Test your detection functions with known log samples
 2. **Validate Output Format**: Ensure alerts follow the expected JSON structure
@@ -193,28 +179,25 @@ poetry run python -m src.cli --in test_logs/ --out test_results.json
 cat test_results.json | python -m json.tool
 ```
 
+### Optional: Kill Chain Analysis (Forensic Investigation)
+
+**This deliverable is not mandatory, but is an opportunity to go above and beyond.**
+
+Your task is to analyze the events and provide deeper insight into the attack by mapping observed activities to the MITRE ATT&CK framework. Identify the specific tactics and techniques employed by the attacker at each stage, extract key Indicators of Compromise (IOCs) such as IP addresses, user agents, API calls, resource identifiers, and timestamps, and explain how these events correlate to demonstrate the progression of the attack. This analysis should help security teams understand the attacker's objectives, methods, and the critical detection points within the kill chain.
+
 ## Deliverables and Submission
 
-Complete the following components to complete the challenge. We will review the details during the interview. You may present those documents as well as your forensics process in OpenSearch, or any other investigation tool if you used one.
+We will review the details during the interview.
 
-### 1. Kill Chain Analysis Document
-- **Format**: PDF, Markdown, Word, PPT, TXT file, whatever works to convey the investigation and findings. We will review during the interview.
-- **Content**: Forensic investigation including:
-  - Executive summary of the incident
-  - Timeline of attack progression with supporting evidence
-  - Technical details of each attack phase
-  - Recommendations for prevention and detection
-
-### 2. Detection Implementation
+### 1. Detection Implementation
 - **Primary File**: `src/detector/rules.py` with your complete detection logic
 - **Documentation**: Code comments explaining your detection approach
 - **Sample Output**: `sample_alerts.json` with example alerts from your implementation
 
-### 3. Implementation Evidence
-- **Testing Results**: Evidence that your implementation handles various log formats
-- **Performance Notes**: Any optimizations or considerations for large datasets
+### 2. Kill chain analysis
+If you go above and beyond, provide a document with the analysis in the format of your choice.
 
-**Required File Structure:**
+**Suggested File Structure:**
 ```
 threat-detection-challenge/
 ├── src/detector/rules.py          # Your detection implementation
