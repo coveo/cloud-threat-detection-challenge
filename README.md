@@ -181,7 +181,9 @@ cat test_results.json | python -m json.tool
 
 ### Optional: Kill Chain Analysis (Forensic Investigation)
 
-**This deliverable is not mandatory, but is an opportunity to go above and beyond.**
+**This deliverable is not mandatory, but completing it will distinguish you as a top candidate.**
+
+While the detection implementation is required, candidates who deliver a comprehensive kill chain analysis will demonstrate advanced threat hunting and analytical capabilities that set them apart. This is your opportunity to showcase expertise that goes beyond the baseline requirements.
 
 Your task is to analyze the events and provide deeper insight into the attack by mapping observed activities to the MITRE ATT&CK framework. Identify the specific tactics and techniques employed by the attacker at each stage, extract key Indicators of Compromise (IOCs) such as IP addresses, user agents, API calls, resource identifiers, and timestamps, and explain how these events correlate to demonstrate the progression of the attack. This analysis should help security teams understand the attacker's objectives, methods, and the critical detection points within the kill chain.
 
